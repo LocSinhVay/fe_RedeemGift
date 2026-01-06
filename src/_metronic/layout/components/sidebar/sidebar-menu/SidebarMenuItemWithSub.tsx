@@ -12,7 +12,7 @@ type Props = {
   hasBullet?: boolean
 }
 
-// Tách ra ngoài để tránh tạo lại mỗi lần render
+// Kiểm tra active sub menu
 const hasActiveChild = (children: React.ReactNode, pathname: string): boolean => {
   return React.Children.toArray(children).some((child): child is React.ReactElement => {
     if (React.isValidElement(child)) {
@@ -44,82 +44,84 @@ const SidebarMenuItemWithSub: React.FC<Props & WithChildren> = ({
     () => document.body.getAttribute('data-kt-app-sidebar-minimize') === 'on'
   )
 
-  const [isOpen, setIsOpen] = useState(() =>
-    !isSidebarMini && hasActiveChild(children, pathname)
-  )
-
   const isChildActive = hasActiveChild(children, pathname)
 
-  // Theo dõi thay đổi của attribute minimize
+  // OPEN STATE ────────────────────────────────────────
+  const [isOpen, setIsOpen] = useState(() => {
+    if (!isSidebarMini) return isChildActive // normal mode → mở theo active
+    return false // minimized → phải click mới mở
+  })
+
+  // Theo dõi toggle minimize
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const minimized = document.body.getAttribute('data-kt-app-sidebar-minimize') === 'on'
       setIsSidebarMini(minimized)
+
+      if (!minimized) {
+        // khi mở rộng → tự mở menu active
+        setIsOpen(isChildActive)
+      }
     })
 
     observer.observe(document.body, { attributes: true, attributeFilter: ['data-kt-app-sidebar-minimize'] })
     return () => observer.disconnect()
-  }, [])
+  }, [isChildActive])
 
-  // Cập nhật isOpen khi pathname hoặc sidebar thay đổi
-  useEffect(() => {
-    if (isChildActive) {
-      setIsOpen(true)
-    } else if (!isSidebarMini) {
-      setIsOpen(false)
-    }
-  }, [pathname, isSidebarMini, isChildActive])
-
+  // Click menu parent
   const handleClick = () => {
     if (isSidebarMini) {
-      setIsOpen((prev) => !prev)
+      // ❗ minimized → luôn toggle
+      setIsOpen(prev => !prev)
     }
   }
 
   return (
-    <div
-      className={clsx('menu-item menu-accordion', {
-        'here show': isSidebarMini ? isOpen : isChildActive,
-      })}
-      {...(!isSidebarMini && { 'data-kt-menu-trigger': 'click' })}
-      onClick={handleClick}
-    >
-      <span className='menu-link'>
-        {hasBullet && (
-          <span className='menu-bullet'>
-            <span className='bullet bullet-dot'></span>
-          </span>
-        )}
-
-        {icon && app?.sidebar?.default?.menu?.iconType === 'svg' && (
-          <span className='menu-icon'>
-            <KTIcon iconName={icon} className='fs-2' />
-          </span>
-        )}
-
-        {fontIcon && app?.sidebar?.default?.menu?.iconType === 'font' && (
-          <i className={clsx('bi fs-3', fontIcon)}></i>
-        )}
-
-        <span className='menu-title'>{title}</span>
-
-        <span
-          className={clsx('menu-arrow', {
-            'rotate-180': isSidebarMini ? isOpen : isChildActive,
-          })}
-        ></span>
-      </span>
-
+    <>
       <div
-        className={clsx('menu-sub menu-sub-accordion', {
-          'menu-active-bg': isSidebarMini ? (isChildActive || isOpen) : isChildActive,
-          'd-none': isSidebarMini && !isOpen && !isChildActive,
-          'show': isSidebarMini && (isOpen || isChildActive),
+        className={clsx('menu-item menu-accordion', {
+          'here show': !isSidebarMini && isChildActive,
+          'menu-open': isSidebarMini && isOpen,
         })}
+        {...(!isSidebarMini && { 'data-kt-menu-trigger': 'click' })}
+        onClick={handleClick}
       >
-        {children}
+        <span className='menu-link'>
+          {hasBullet && (
+            <span className='menu-bullet'>
+              <span className='bullet bullet-dot'></span>
+            </span>
+          )}
+
+          {/* ICON + TOOLTIP MINI */}
+          {icon && app?.sidebar?.default?.menu?.iconType === 'svg' && (
+            <span className="menu-icon mini-tooltip-container">
+              <KTIcon iconName={icon} className="fs-2" />
+
+              {isSidebarMini && <span className="mini-tooltip">{title}</span>}
+            </span>
+          )}
+
+          <span className='menu-title'>{title}</span>
+
+          <span
+            className={clsx('menu-arrow', {
+              'rotate-180': (!isSidebarMini && isChildActive) || (isSidebarMini && isOpen),
+            })}
+          ></span>
+        </span>
+
+        {/* SUB MENU */}
+        <div
+          className={clsx('menu-sub menu-sub-accordion', {
+            show: (!isSidebarMini && isChildActive) || (isSidebarMini && isOpen),
+            'd-none': isSidebarMini && !isOpen,
+          })}
+        >
+          {children}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

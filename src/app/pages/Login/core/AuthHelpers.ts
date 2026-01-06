@@ -2,11 +2,8 @@
 import { AxiosInstance } from 'axios';
 import { AuthModel } from './_models';
 
-// Đặt key rõ ràng, tránh trùng tên với API browser
 const AUTH_STORAGE_KEY = 'authData';
-
-// === Storage helper: chọn dùng localStorage hoặc sessionStorage ===
-const storage = localStorage; // 👉 đổi thành sessionStorage nếu muốn lưu theo phiên
+const storage = localStorage;
 
 const getAuth = (): AuthModel | null => {
   const value = storage.getItem(AUTH_STORAGE_KEY);
@@ -40,13 +37,11 @@ const removeAuth = () => {
   }
 };
 
-// Kiểm tra người dùng có đăng nhập không
 const checkAuth = (): boolean => {
   const auth = getAuth();
   return !!(auth && auth.Token);
 };
 
-// Setup axios interceptor
 export function setupAxios(axiosInstance: AxiosInstance) {
   axiosInstance.defaults.headers.Accept = 'application/json';
 
@@ -70,8 +65,8 @@ export function setupAxios(axiosInstance: AxiosInstance) {
     (response) => response,
     (error) => {
       if (error.response?.status === 401) {
-        removeAuth(); // clear token
-        window.location.href = '/auth'; // redirect login
+        removeAuth();
+        window.location.href = '/auth';
       }
       return Promise.reject(error);
     }

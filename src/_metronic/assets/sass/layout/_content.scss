@@ -8,15 +8,45 @@
 	.app-content {
 		[data-kt-app-toolbar-enabled="true"]:not([data-kt-app-toolbar-fixed="true"]) & {
 			padding-top: 0;
-		}			
+		}
 	}
 }
 
 // Tablet & mobile modes
 @include media-breakpoint-down(lg) {
-	.app-content { 
+	.app-content {
 		[data-kt-app-toolbar-enabled="true"]:not([data-kt-app-toolbar-fixed-mobile="true"]) & {
 			padding-top: 0;
 		}
 	}
+}
+
+/* Tooltip global CSS */
+.mini-tooltip-container {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.mini-tooltip-container:hover .mini-tooltip {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.mini-tooltip {
+	position: fixed;
+	left: 80px;
+	padding: 6px 12px;
+	background: #E6F4FF;
+	color: #0A63A8;
+	font-size: 13px;
+	font-weight: 600;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	white-space: nowrap;
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	pointer-events: none;
+	z-index: 99999;
 }

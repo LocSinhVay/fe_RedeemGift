@@ -36,27 +36,27 @@ const Sidebar = memo(() => {
 })
 
 const updateDOM = (config: ILayout) => {
-  if (config.app?.sidebar?.default?.minimize?.desktop?.enabled) {
-    if (config.app?.sidebar?.default?.minimize?.desktop?.default) {
-      document.body.setAttribute('data-kt-app-sidebar-minimize', 'on')
-    }
-  }
+  // if (config.app?.sidebar?.default?.minimize?.desktop?.enabled) {
+  //   if (config.app?.sidebar?.default?.minimize?.desktop?.default) {
+  //     document.body.setAttribute('data-kt-app-sidebar-minimize', 'on')
+  //   }
+  // }
 
-  if (config.app?.sidebar?.default?.collapse?.desktop?.enabled) {
-    if (config.app?.sidebar?.default?.collapse?.desktop?.default) {
-      document.body.setAttribute('data-kt-app-sidebar-collapse', 'on')
-    }
-  }
+  // if (config.app?.sidebar?.default?.collapse?.desktop?.enabled) {
+  //   if (config.app?.sidebar?.default?.collapse?.desktop?.default) {
+  //     document.body.setAttribute('data-kt-app-sidebar-collapse', 'on')
+  //   }
+  // }
 
-  if (config.app?.sidebar?.default?.collapse?.mobile?.enabled) {
-    if (config.app?.sidebar?.default?.collapse?.mobile?.default) {
-      document.body.setAttribute('data-kt-app-sidebar-collapse-mobile', 'on')
-    }
-  }
+  // if (config.app?.sidebar?.default?.collapse?.mobile?.enabled) {
+  //   if (config.app?.sidebar?.default?.collapse?.mobile?.default) {
+  //     document.body.setAttribute('data-kt-app-sidebar-collapse-mobile', 'on')
+  //   }
+  // }
 
-  if (config.app?.sidebar?.default?.stacked) {
-    document.body.setAttribute('app-sidebar-stacked', 'true')
-  }
+  // if (config.app?.sidebar?.default?.stacked) {
+  //   document.body.setAttribute('app-sidebar-stacked', 'true')
+  // }
 
   document.body.setAttribute('data-kt-app-sidebar-enabled', 'true')
   document.body.setAttribute(
@@ -68,9 +68,9 @@ const updateDOM = (config: ILayout) => {
   const appSidebarDefaultDrawerAttributes =
     (appSidebarDefaultDrawerEnabled && (config.app?.sidebar?.default?.drawer?.attributes || {})) || {}
 
-  const appSidebarDefaultStickyEnabled = config.app?.sidebar?.default?.sticky?.enabled
-  const appSidebarDefaultStickyAttributes =
-    (appSidebarDefaultStickyEnabled && (config.app?.sidebar?.default?.sticky?.attributes || {})) || {}
+  // const appSidebarDefaultStickyEnabled = config.app?.sidebar?.default?.sticky?.enabled
+  // const appSidebarDefaultStickyAttributes =
+  //   (appSidebarDefaultStickyEnabled && (config.app?.sidebar?.default?.sticky?.attributes || {})) || {}
 
   // Cập nhật attributes cho sidebar element ngay lập tức (bỏ setTimeout để đồng bộ)
   const sidebarElement = document.getElementById('kt_app_sidebar')
@@ -86,12 +86,12 @@ const updateDOM = (config: ILayout) => {
       })
     }
 
-    // Gán lại các thuộc tính sticky nếu có
-    if (appSidebarDefaultStickyEnabled) {
-      Object.entries(appSidebarDefaultStickyAttributes).forEach(([key, value]) => {
-        sidebarElement.setAttribute(key, value)
-      })
-    }
+    // // Gán lại các thuộc tính sticky nếu có
+    // if (appSidebarDefaultStickyEnabled) {
+    //   Object.entries(appSidebarDefaultStickyAttributes).forEach(([key, value]) => {
+    //     sidebarElement.setAttribute(key, value)
+    //   })
+    // }
   }
 }
 

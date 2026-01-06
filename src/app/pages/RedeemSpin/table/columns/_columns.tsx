@@ -1,9 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ActionsCell } from './ActionsCell'
-import { StatusCell } from './StatusCell'
 import { SortColumnHeader } from '../../../../components/sortColumn/SortColumnHeader'
 import { allowPositiveNumbersOnly } from '../../../../hooks/allowPositiveNumbersOnly'
 import { formatDate } from '../../../../hooks/formatDate'
+import { Bool_StatusCell } from '../../../../components/statusCell/Bool_StatusCell'
 
 export const RedeemSpinColumns = (namespace: string): ColumnDef<any>[] => [
   {
@@ -77,6 +77,6 @@ export const RedeemSpinColumns = (namespace: string): ColumnDef<any>[] => [
     header: (header) => (
       <SortColumnHeader header={header} title='Tình trạng' className='min-w-100px' namespace={namespace} />
     ),
-    cell: ({ row }) => <StatusCell isActive={row.original.IsActive} />,
+    cell: ({ row }) => <Bool_StatusCell isActive={row.original.IsActive} />,
   },
 ]

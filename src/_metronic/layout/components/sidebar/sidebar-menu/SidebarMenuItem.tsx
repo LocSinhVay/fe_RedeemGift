@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { useLocation } from 'react-router'
 import { checkIsActive, KTIcon } from '../../../../helpers'
@@ -18,25 +18,43 @@ const SidebarMenuItem: React.FC<Props> = ({ to, title, icon, fontIcon, hasBullet
   const { config } = useLayout()
   const { app } = config
 
+  const [isSidebarMini, setIsSidebarMini] = useState(
+    () => document.body.getAttribute('data-kt-app-sidebar-minimize') === 'on'
+  )
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsSidebarMini(
+        document.body.getAttribute('data-kt-app-sidebar-minimize') === 'on'
+      )
+    })
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-kt-app-sidebar-minimize'] })
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div className='menu-item'>
-      <a className={clsx('menu-link', { active: isActive })} href={to}>
-        {hasBullet && (
-          <span className='menu-bullet'>
-            <span className='bullet bullet-dot'></span>
-          </span>
-        )}
-        {icon && app?.sidebar?.default?.menu?.iconType === 'svg' && (
-          <span className='menu-icon'>
-            <KTIcon iconName={icon} className='fs-2' />
-          </span>
-        )}
-        {fontIcon && app?.sidebar?.default?.menu?.iconType === 'font' && (
-          <i className={clsx('bi fs-3', fontIcon)}></i>
-        )}
-        <span className='menu-title'>{title}</span>
-      </a>
-    </div>
+    <>
+      <div className="menu-item">
+        <a href={to} className={clsx('menu-link', { active: isActive })}>
+          {icon && (
+            <span
+              className={clsx(
+                'menu-icon mini-tooltip-container',
+                app?.sidebar?.default?.menu?.iconType === 'svg' && 'has-icon'
+              )}
+            >
+              <KTIcon iconName={icon} className="fs-2" />
+
+              {isSidebarMini && (
+                <span className="mini-tooltip">{title}</span>
+              )}
+            </span>
+          )}
+
+          <span className="menu-title">{title}</span>
+        </a>
+      </div>
+    </>
   )
 }
 

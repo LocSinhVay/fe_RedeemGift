@@ -1,12 +1,5 @@
 import { Link } from 'react-router-dom'
 import { toAbsoluteUrl } from '../../../helpers'
-import { MutableRefObject, useEffect, useRef } from 'react'
-import { ToggleComponent } from '../../../assets/ts/components'
-
-// type PropsType = {
-//   sidebarRef: MutableRefObject<HTMLDivElement | null>
-// }
-
 const SidebarLogo = () => {
   return (
     <div className='app-sidebar-logo px-6' id='kt_app_sidebar_logo'>

@@ -1,8 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { StatusCell } from './StatusCell'
 import { ActionsCell } from './ActionsCell'
 import { SortColumnHeader } from '../../../../components/sortColumn/SortColumnHeader'
 import { EmailConfigCell } from './EmailConfigCell'
+import { Bool_StatusCell } from '../../../../components/statusCell/Bool_StatusCell'
 
 const emailConfigColumns = (namespace: string): ColumnDef<any>[] => [
   {
@@ -23,7 +23,7 @@ const emailConfigColumns = (namespace: string): ColumnDef<any>[] => [
     header: (header) => (
       <SortColumnHeader header={header} title='Tình trạng' className='min-w-100px' namespace={namespace} />
     ),
-    cell: ({ row }) => <StatusCell isActive={row.original.IsActive} />,
+    cell: ({ row }) => <Bool_StatusCell isActive={row.original.IsActive} />,
   },
   {
     id: 'actions',

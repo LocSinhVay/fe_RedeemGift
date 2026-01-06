@@ -21,7 +21,7 @@ const QueryRequestContextMap: { [key: string]: React.Context<QueryRequestContext
 const getOrCreateContext = (namespace: string = 'default') => {
   if (!QueryRequestContextMap[namespace]) {
     QueryRequestContextMap[namespace] = createContext<QueryRequestContextProps>({
-      state: initialQueryRequest.state,
+      state: { ...initialQueryRequest.state },
       updateState: () => { },
     })
   }
@@ -40,8 +40,6 @@ const QueryRequestProvider: FC<QueryRequestProviderProps> = ({
 }) => {
   const QueryRequestContext = getOrCreateContext(namespace)
 
-  const isFirstRender = useRef(true)
-
   const initialState = useMemo(() => {
     return initialParams
       ? { ...initialQueryRequest.state, ...initialParams }
@@ -50,20 +48,30 @@ const QueryRequestProvider: FC<QueryRequestProviderProps> = ({
 
   const [state, setState] = useState<QueryState>(initialState)
 
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false
-      return
-    }
+  //const isFirstRender = useRef(true)
+  // useEffect(() => {
+  //   if (isFirstRender.current) {
+  //     isFirstRender.current = false
+  //     return
+  //   }
 
-    if (initialParams) {
-      setState((prevState) => {
-        const newState = { ...prevState, ...initialParams }
-        return JSON.stringify(prevState) !== JSON.stringify(newState)
-          ? newState
-          : prevState
-      })
-    }
+  //   if (initialParams) {
+  //     setState((prevState) => {
+  //       const newState = { ...prevState, ...initialParams }
+  //       return JSON.stringify(prevState) !== JSON.stringify(newState)
+  //         ? newState
+  //         : prevState
+  //     })
+  //   }
+  // }, [initialParams])
+
+  useEffect(() => {
+    if (!initialParams) return
+
+    setState((prev) => {
+      const next = { ...prev, ...initialParams }
+      return JSON.stringify(prev) !== JSON.stringify(next) ? next : prev
+    })
   }, [initialParams])
 
   const updateState = useCallback(

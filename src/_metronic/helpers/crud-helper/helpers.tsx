@@ -10,35 +10,10 @@ function isNotEmpty(obj: unknown) {
   return obj !== undefined && obj !== null && obj !== ''
 }
 
-// Example: page=1&items_per_page=10&sort=id&order=desc&search=a&filter_name=a&filter_online=false
-// function stringifyRequestQuery(state: QueryState, defaultPageSize?: number): string {
-//   // Nếu `defaultPageSize` được truyền vào, ưu tiên sử dụng nó. Nếu không, giữ nguyên state.pageSize hoặc mặc định 10.
-//   const pageSize = state.pageSize ?? defaultPageSize ?? 10
-//   const pagination = qs.stringify(state, { filter: ['offset', 'pageSize'], skipNulls: true })
-//   const sort = qs.stringify(state, { filter: ['sort', 'order'], skipNulls: true })
-//   const search = isNotEmpty(state.keySearch)
-//     ? qs.stringify(state, { filter: ['keySearch'], skipNulls: true })
-//     : ''
-
-//   const filter = state.filter
-//     ? Object.entries(state.filter)
-//       .filter((obj) => isNotEmpty(obj[1]))
-//       .map((obj) => {
-//         return `${obj[0]}=${obj[1]}`
-//       })
-//       .join('&')
-//     : ''
-
-//   return [pagination, sort, search, filter]
-//     .filter((f) => f)
-//     .join('&')
-//     .toLowerCase()
-// }
-
 // Hàm stringifyRequestQuery
 function stringifyRequestQuery(state: QueryState): string {
   const pagination = qs.stringify(
-    { offset: state.offset ?? 0, pageSize: state.pageSize },
+    { offset: state.offset ?? 0, pageSize: state.pageSize, },
     { skipNulls: true }
   );
 
@@ -58,7 +33,11 @@ function stringifyRequestQuery(state: QueryState): string {
       .join('&')
     : '';
 
-  return [pagination, sort, search, filter]
+  const projectCode = isNotEmpty(state.projectCode)
+    ? qs.stringify({ projectCode: state.projectCode }, { skipNulls: true })
+    : '';
+
+  return [pagination, sort, search, filter, projectCode]
     .filter(Boolean)
     .join('&')
     .toLowerCase();

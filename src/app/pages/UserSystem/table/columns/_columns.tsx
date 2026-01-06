@@ -1,8 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { StatusCell } from './StatusCell'
 import { ActionsCell } from './ActionsCell'
 import { SortColumnHeader } from '../../../../components/sortColumn/SortColumnHeader'
 import { UserAvatarCell } from './UserAvatarCell'
+import { Bool_StatusCell } from '../../../../components/statusCell/Bool_StatusCell'
 
 export const userSystemColumns = (namespace: string): ColumnDef<any>[] => [
   {
@@ -41,7 +41,7 @@ export const userSystemColumns = (namespace: string): ColumnDef<any>[] => [
     header: (header) => (
       <SortColumnHeader header={header} title='Tình trạng' className='min-w-100px' namespace={namespace} />
     ),
-    cell: ({ row }) => <StatusCell status={row.original.Status} />,
+    cell: ({ row }) => <Bool_StatusCell isActive={row.original.Status} />,
   },
   {
     id: 'actions',

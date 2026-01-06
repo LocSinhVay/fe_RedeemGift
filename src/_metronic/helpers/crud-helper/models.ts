@@ -29,11 +29,15 @@ export type SearchState = {
   keySearch?: string
 }
 
+export type ProjectCodeState = {
+  projectCode?: string | null
+}
+
 export type Response<T> = {
   Data?: T
 }
 
-export type QueryState = PaginationState & SortState & FilterState & SearchState
+export type QueryState = PaginationState & SortState & FilterState & SearchState & ProjectCodeState
 
 export type QueryRequestContextProps = {
   state: QueryState
